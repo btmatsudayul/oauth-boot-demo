@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>OAuth Server</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.11/css/uikit.min.css" />
+</head>
+<body>
+	<div class="uk-grid">
+		<div class="uk-width-1-5"></div>
+		<div class="uk-width-3-5">
+			<h1>Task Auth</h1>
+			<form th:action="@{/logout}" method="post">
+				<button class="uk-button uk-button-default">Logout</button>
+			</form>
+		</div>
+		<div class="uk-width-1-5"></div>
+	</div>
+</body>
+</html>

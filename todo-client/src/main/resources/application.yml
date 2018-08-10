@@ -1,0 +1,24 @@
+# resource server uri
+api-uri: http://localhost:18082
+
+# authz server uri
+auth-server-uri: http://localhost:18081/authz
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+# OAuth client (authz server's inmemory client)
+security:
+  oauth2:
+    client:
+      client-id: client
+      client-secret: demo
+      scope: read,write,delete
+      user-authorization-uri: ${auth-server-uri}/oauth/authorize
+      access-token-uri: ${auth-server-uri}/oauth/token
+    resource:
+      jwt:
+        key-uri: ${auth-server-uri}/oauth/token_key
