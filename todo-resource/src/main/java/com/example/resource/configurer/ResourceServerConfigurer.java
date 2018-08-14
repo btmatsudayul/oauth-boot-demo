@@ -16,6 +16,10 @@ public class ResourceServerConfigurer extends ResourceServerConfigurerAdapter {
   @Override
   public void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
+//      .antMatchers(HttpMethod.GET, "/api/v1/**").access("#oauth2.isOAuth()")
+//      .antMatchers(HttpMethod.POST, "/api/v1/**").access("#oauth2.isOAuth()")
+//      .antMatchers(HttpMethod.PUT, "/api/v1/**").access("#oauth2.isOAuth()")
+//      .antMatchers(HttpMethod.DELETE, "/api/v1/**").access("#oauth2.isOAuth()");
       .antMatchers(HttpMethod.GET, "/api/v1/**").access("#oauth2.hasScope('read')")
       .antMatchers(HttpMethod.POST, "/api/v1/**").access("#oauth2.hasScope('write')")
       .antMatchers(HttpMethod.PUT, "/api/v1/**").access("#oauth2.hasScope('write')")

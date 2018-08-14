@@ -29,7 +29,7 @@ VALUES(
     'authorization_code,refresh_token',
     'http://localhost:8080/login',
     'ROLE_USER',
-    '3600',
+    '10',
     '86400',
     NULL,
     NULL

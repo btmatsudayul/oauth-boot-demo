@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.resource.mapper.TodoMapper;
@@ -14,6 +16,12 @@ import com.example.resource.model.Todo;
 public class TodoServiceImpl implements TodoService {
 
   private static final long MAX_UNFINISHED_COUNT = 5;
+
+  @Autowired
+  OAuth2RestTemplate restTemplate;
+
+  @Value("${api-url:http://localhost:18083}/api/v1/message")
+  String resourcesUrl;
 
   @Autowired
   TodoMapper todoMapper;
@@ -35,7 +43,12 @@ public class TodoServiceImpl implements TodoService {
   @Override
   @Transactional(readOnly = true)
   public Collection<Todo> findAll() {
-    return todoMapper.findAll();
+
+    // アクセストークンを利用して他サービスを呼び出し
+//    String message = restTemplate.getForObject(resourcesUrl, String.class);
+    Collection<Todo> todos = todoMapper.findAll();
+//    todos.stream().forEach(t -> t.setMessage(message));
+    return todos;
   }
 
   @Override

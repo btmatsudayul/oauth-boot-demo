@@ -11,6 +11,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.example.client.model.Todo;
 
@@ -26,9 +27,14 @@ public class TodoServiceImpl implements TodoService {
   @Override
   public Todo findOne(String todoId) {
 
-    ResponseEntity<Todo> entity =
-        restTemplate.getForEntity(resourcesUrl + "/todoId=", Todo.class, todoId);
-    Todo todo = entity.getBody();
+    ResponseEntity<Todo> entity = null;
+    Todo todo = null;
+    try {
+      entity = restTemplate.getForEntity(resourcesUrl + "/{todoId}", Todo.class, todoId);
+      todo = entity.getBody();
+    } catch (RestClientException e) {
+      throw new IllegalStateException(e.getMessage());
+    }
 
     if (todo == null) {
       StringBuilder sb = new StringBuilder();
@@ -36,6 +42,7 @@ public class TodoServiceImpl implements TodoService {
       sb.append("[E404] The requested Todo is not found. (id=" + todoId + ")");
       throw new IllegalStateException(sb.toString());
     }
+
     return todo;
   }
 
@@ -66,8 +73,6 @@ public class TodoServiceImpl implements TodoService {
   @Override
   public Todo finish(String todoId) {
 
-    // TODO
-
     Todo todo = findOne(todoId);
     if (todo.isFinished()) {
       StringBuilder sb = new StringBuilder();
@@ -75,20 +80,18 @@ public class TodoServiceImpl implements TodoService {
       sb.append("[E002] The requested Todo is already finished. (id=" + todoId + ")");
       throw new UnsupportedOperationException(sb.toString());
     }
-    todo.setFinished(true);
 
-    
+    try {
+      restTemplate.put(resourcesUrl + "/{todoId}", null, todoId);
+    } catch (RestClientException e) {
+      throw new IllegalStateException(e.getMessage());
+    }
     return todo;
   }
 
   @Override
   public void delete(String todoId) {
-
-    // TODO
-
-    Todo todo = findOne(todoId);
-    
-    
+    // TODO :
   }
 
 

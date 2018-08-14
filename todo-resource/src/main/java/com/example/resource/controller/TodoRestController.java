@@ -1,15 +1,19 @@
 package com.example.resource.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.resource.model.Todo;
@@ -22,12 +26,25 @@ public class TodoRestController {
   @Autowired
   TodoService todoService;
 
+//  @Autowired
+//  TokenStore tokenStore;
+  
   @Autowired
   Mapper beanMapper;
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   @ResponseStatus(HttpStatus.OK)
-  public List<TodoResource> getTodos() {
+  public List<TodoResource> getTodos(Principal principal) {
+
+//    if (principal instanceof OAuth2Authentication) {
+//      OAuth2AuthenticationDetails details =
+//          (OAuth2AuthenticationDetails) ((OAuth2Authentication) principal).getDetails();
+//      OAuth2AccessToken token = tokenStore.readAccessToken(details.getTokenValue());
+//      Map<String, Object> additionalInfo = token.getAdditionalInformation();
+//      // 独自パラメータを取得
+//      additionalInfo.get("customKey");
+//    }
+
     Collection<Todo> todos = todoService.findAll();
     List<TodoResource> todoResources = new ArrayList<>();
     for (Todo todo : todos) {
@@ -36,7 +53,7 @@ public class TodoRestController {
     return todoResources;
   }
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public TodoResource postTodos(@RequestBody TodoResource todoResource) {
     Todo createdTodo = todoService.create(beanMapper.map(todoResource, Todo.class));
@@ -44,7 +61,7 @@ public class TodoRestController {
     return createdTodoResponse;
   }
 
-  @RequestMapping(value = "{todoId}", method = RequestMethod.GET)
+  @GetMapping(value = "{todoId}")
   @ResponseStatus(HttpStatus.OK)
   public TodoResource getTodo(@PathVariable("todoId") String todoId) {
     Todo todo = todoService.findOne(todoId);
@@ -52,7 +69,7 @@ public class TodoRestController {
     return todoResource;
   }
 
-  @RequestMapping(value = "{todoId}", method = RequestMethod.PUT)
+  @PutMapping(value = "{todoId}")
   @ResponseStatus(HttpStatus.OK)
   public TodoResource putTodo(@PathVariable("todoId") String todoId) {
     Todo finishedTodo = todoService.finish(todoId);
@@ -60,7 +77,7 @@ public class TodoRestController {
     return finishedTodoResource;
   }
 
-  @RequestMapping(value = "{todoId}", method = RequestMethod.DELETE)
+  @DeleteMapping(value = "{todoId}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteTodo(@PathVariable("todoId") String todoId) {
     todoService.delete(todoId);

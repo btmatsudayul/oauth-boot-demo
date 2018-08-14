@@ -19,6 +19,8 @@ public class Todo implements Serializable {
 
   private String username;
 
+  private String message;
+
   private boolean finished;
 
   private Date createdAt;

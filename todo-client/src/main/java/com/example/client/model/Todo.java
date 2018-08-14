@@ -18,6 +18,8 @@ public class Todo implements Serializable {
   private String todoTitle;
 
   private String username;
+  
+  private String message;
 
   private boolean finished;
 

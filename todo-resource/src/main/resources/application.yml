@@ -1,4 +1,7 @@
 
+# authz server uri
+auth-server-uri: http://localhost:18081/authz
+
 server:
   port: 18082
  
@@ -15,7 +18,7 @@ security:
       client-id: resource-server
       client-secret: demo
     resource:
-      token-info-uri: http://localhost:18081/authz/oauth/check_token
+      token-info-uri: ${auth-server-uri}/oauth/check_token_custom
 #      jwt:
-#        key-uri: http://localhost:18081/authz/oauth/token_key
+#        key-uri: ${auth-server-uri}/oauth/token_key
 

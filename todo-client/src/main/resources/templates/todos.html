@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>todos</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.11/css/uikit.min.css" />
+</head>
+
+<body>
+
+	<div class="uk-grid">
+		<div class="uk-width-1-5"></div>
+		<div class="uk-width-3-5">
+			<!-- 
+			<nav class="uk-navbar-container" uk-navbar="">
+				<div class="uk-navbar-left">
+					<ul class="uk-navbar-nav">
+						<li
+							th:classappend="${#httpServletRequest.requestURI == '/'} ? 'uk-active'"><a
+							th:href="@{/}">Home</a></li>
+						<li
+							th:classappend="${#httpServletRequest.requestURI == '/todoss'} ? 'uk-active'"><a
+							th:href="@{/todoss}">todoss</a></li>
+					</ul>
+				</div>
+			</nav>
+			 -->
+			<h1>Todo</h1>
+			<form th:action="@{/todo/create}" class="uk-panel uk-panel-box uk-form"
+				method="post">
+				<span th:text="${#httpServletRequest.remoteUser}">user</span> <input
+					class="uk-input uk-form-width-large" type="text" name="todoTitle"
+					placeholder="Todo" required="required" />
+				<button class="uk-button uk-button-primary">Send</button>
+			</form>
+			<br />
+			<div class="uk-panel uk-panel-box" th:each="todo : ${todos}">
+				<h3 class="uk-panel-title" th:text="${todo.todoTitle}">title</h3>
+				<span th:text="${todo.username}">user
+				</span> @
+				<span
+					th:text="${todo.createdAt}">2018-01-01</span>
+				<span
+					th:text="${todo.message}">message</span>
+				<div th:if="${todo.finished}">
+					<button type="submit" th:value="${todo.todoId}" class="uk-button-mini uk-button-danger"
+					name="todoId">Delete</button>
+					<!-- TODO -->
+				</div>
+				<div th:unless="${todo.finished}">
+					<form th:action="@{/todo/finish}" class="uk-panel uk-panel-box uk-form"
+						method="post">
+					<button type="submit" th:value="${todo.todoId}" class="uk-button-mini uk-button-success"
+					name="todoId">Finish</button>
+					</form>
+					
+				</div>
+				<hr class="uk-divider-icon" />
+			</div>
+		</div>
+		<div class="uk-width-1-5"></div>
+	</div>
+</body>
+</html>

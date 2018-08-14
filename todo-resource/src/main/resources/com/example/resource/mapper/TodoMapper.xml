@@ -38,6 +38,8 @@
 			created_at
 		FROM
 			todo
+		ORDER BY
+			created_at ASC
 	]]>
 	</select>
 
